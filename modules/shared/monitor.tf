@@ -26,14 +26,16 @@ resource "azurerm_storage_account" "this" {
   identity {
     type = "SystemAssigned"
   }
-
-  network_rules {
-    default_action             = "Deny"
-    bypass                     = toset(["AzureServices"])
-    ip_rules                   = [] # [var.client_ip.start_ip_address, var.agent_ip]
-    virtual_network_subnet_ids = var.hub_subnet_gateway_id != null ? [var.hub_subnet_gateway_id] : []
-  }
 }
+
+# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account_network_rules
+resource "azurerm_storage_account_network_rules" "this" {
+  storage_account_id         = azurerm_storage_account.this.id
+  default_action             = "Deny"
+  bypass                     = toset(["None"])
+  virtual_network_subnet_ids = var.hub_subnet_gateway_id != null ? [var.hub_subnet_gateway_id] : []
+}
+
 
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/log_analytics_linked_storage_account
 resource "azurerm_log_analytics_linked_storage_account" "this" {
