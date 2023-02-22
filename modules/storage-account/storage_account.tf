@@ -5,6 +5,7 @@ resource "azurerm_resource_group" "this" {
   tags     = var.tags
 }
 
+# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account
 resource "azurerm_storage_account" "this" {
   for_each = {
     for o in var.storage_account : o.suffix => o

@@ -40,12 +40,12 @@ variable "data_factory" {
     managed_virtual_network_enabled = optional(bool, false)
     public_network_enabled          = bool
 
-    integration_runtimes = list(object({
+    integration_runtimes = optional(list(object({
       name             = string
       compute_type     = string
       core_count       = number
       time_to_live_min = number
-    }))
+    })))
   })
 
   default = {
@@ -67,6 +67,11 @@ variable "data_factory" {
 variable "dns_zone_adf_id" {
   type        = string
   description = "Id of the private DNS zone for the Data Factory Portal."
+}
+
+variable "dns_zone_azure_devices_id" {
+  type        = string
+  description = "Id of the private DNS zone for the IotHub."
 }
 
 variable "dns_zone_datafactory_id" {
@@ -123,6 +128,20 @@ variable "hub_subnet_gateway_id" {
   type        = string
   default     = null
   description = "Id of the Gateway in the Hub."
+}
+
+variable "iothub" {
+  type = object({
+    sku_name     = string
+    sku_capacity = string
+  })
+
+  default = {
+    sku_capacity = "1"
+    sku_name     = "F1"
+  }
+
+  description = "Configuration of the Iothub."
 }
 
 variable "location" {
@@ -294,6 +313,84 @@ variable "security_groups" {
 variable "subnet_private_endpoints_id" {
   type        = string
   description = "Id of the subnet for the private endpoints."
+}
+
+variable "synapse_aad_admin_login" {
+  type        = string
+  default     = null
+  description = "Azure Active Directory Azure Synapse Analytics Admininstrator login"
+}
+
+variable "synapse_aad_admin_object_id" {
+  type        = string
+  default     = null
+  description = "Azure Active Directory Azure Synapse Analytics Analytics Admininstrator object id"
+}
+
+variable "synapse_workspace" {
+  type = object({
+    spark_pools = optional(list(object({
+      auto_pause_delay_in_minutes = number
+      auto_scale_max_node_count   = number
+      auto_scale_min_node_count   = number
+      cache_size                  = number
+      name                        = string
+      node_size                   = string
+      node_size_family            = string
+      spark_version               = string
+    })))
+
+    sql_pools = optional(list(object({
+      auto_pause     = string
+      data_encrypted = bool
+      collation      = string
+      create_mode    = string
+      sku_name       = string
+      name           = string
+    })))
+
+    integration_runtimes = optional(list(object({
+      name             = string
+      compute_type     = string
+      core_count       = number
+      time_to_live_min = number
+    })))
+  })
+
+  default = {
+    spark_pools = [
+      {
+        auto_pause_delay_in_minutes = 15
+        auto_scale_max_node_count   = 10
+        auto_scale_min_node_count   = 3
+        cache_size                  = 100
+        name                        = "SparkPool01"
+        node_size                   = "Small"
+        node_size_family            = "MemoryOptimized"
+        spark_version               = "3.2"
+      }
+    ]
+
+    sql_pools = [
+      {
+        auto_pause     = "enabled"
+        collation      = "SQL_Latin1_General_CP1_CI_AS"
+        create_mode    = "Default"
+        data_encrypted = true
+        name           = "SqlPool01"
+        sku_name       = "DW100c"
+      }
+    ]
+
+    integration_runtimes = [{
+      compute_type     = "General"
+      core_count       = 8
+      name             = "AzHIR01"
+      time_to_live_min = 15
+    }]
+  }
+
+  description = "Configuration of Azure Synapse Analytics Workspace."
 }
 
 variable "tags" {

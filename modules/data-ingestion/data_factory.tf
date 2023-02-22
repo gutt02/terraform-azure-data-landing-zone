@@ -15,7 +15,7 @@ resource "azurerm_data_factory" "this" {
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/data_factory_integration_runtime_azure
 resource "azurerm_data_factory_integration_runtime_azure" "data_factory_integration_runtime_azure" {
   for_each = {
-    for o in var.data_factory.integration_runtimes : lower(replace(o.name, " ", "_")) => o
+    for o in var.data_factory.integration_runtimes : lower(replace(o.name, " ", "_")) => o if var.data_factory.integration_runtimes != null
   }
 
   name             = each.value.name
