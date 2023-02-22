@@ -23,12 +23,25 @@ resource "azurerm_storage_account" "this" {
 
   is_hns_enabled = each.value.is_hns_enabled
 
-  network_rules {
-    default_action             = "Deny"
-    bypass                     = toset(["AzureServices"])
-    ip_rules                   = []
-    virtual_network_subnet_ids = var.hub_subnet_gateway_id != null ? [var.hub_subnet_gateway_id] : []
+  # network_rules {
+  #   default_action             = "Deny"
+  #   bypass                     = toset(["AzureServices"])
+  #   ip_rules                   = []
+  #   virtual_network_subnet_ids = var.hub_subnet_gateway_id != null ? [var.hub_subnet_gateway_id] : []
+  # }
+}
+
+# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account_network_rules
+resource "azurerm_storage_account_network_rules" "this" {
+  for_each = {
+    for o in var.storage_account : o.suffix => o
   }
+
+  storage_account_id         = azurerm_storage_account.this[each.key].id
+  default_action             = "Deny"
+  bypass                     = toset(["AzureServices"])
+  ip_rules                   = []
+  virtual_network_subnet_ids = var.hub_subnet_gateway_id != null ? [var.hub_subnet_gateway_id] : []
 }
 
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint
@@ -41,7 +54,7 @@ resource "azurerm_private_endpoint" "blob" {
   name                = "${azurerm_storage_account.this[each.key].name}-prep-blob"
   location            = var.location
   resource_group_name = azurerm_resource_group.this.name
-  subnet_id           = var.subnet_id
+  subnet_id           = var.subnet_private_endpoints_id
 
   private_dns_zone_group {
     name                 = replace(var.dns_zone_blob_id, "/.*[/]/", "")
@@ -64,7 +77,7 @@ resource "azurerm_private_endpoint" "dfs" {
   name                = "${azurerm_storage_account.this[each.key].name}-prep-dfs"
   location            = var.location
   resource_group_name = azurerm_resource_group.this.name
-  subnet_id           = var.subnet_id
+  subnet_id           = var.subnet_private_endpoints_id
 
   private_dns_zone_group {
     name                 = replace(var.dns_zone_dfs_id, "/.*[/]/", "")
@@ -87,7 +100,7 @@ resource "azurerm_private_endpoint" "file" {
   name                = "${azurerm_storage_account.this[each.key].name}-prep-file"
   location            = var.location
   resource_group_name = azurerm_resource_group.this.name
-  subnet_id           = var.subnet_id
+  subnet_id           = var.subnet_private_endpoints_id
 
   private_dns_zone_group {
     name                 = replace(var.dns_zone_file_id, "/.*[/]/", "")
@@ -110,7 +123,7 @@ resource "azurerm_private_endpoint" "queue" {
   name                = "${azurerm_storage_account.this[each.key].name}-prep-queue"
   location            = var.location
   resource_group_name = azurerm_resource_group.this.name
-  subnet_id           = var.subnet_id
+  subnet_id           = var.subnet_private_endpoints_id
 
   private_dns_zone_group {
     name                 = replace(var.dns_zone_queue_id, "/.*[/]/", "")
@@ -133,7 +146,7 @@ resource "azurerm_private_endpoint" "table" {
   name                = "${azurerm_storage_account.this[each.key].name}-prep-table"
   location            = var.location
   resource_group_name = azurerm_resource_group.this.name
-  subnet_id           = var.subnet_id
+  subnet_id           = var.subnet_private_endpoints_id
 
   private_dns_zone_group {
     name                 = replace(var.dns_zone_table_id, "/.*[/]/", "")

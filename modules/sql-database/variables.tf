@@ -35,29 +35,9 @@ variable "client_secret" {
   description = "Client secret of the service principal."
 }
 
-variable "dns_zone_blob_id" {
+variable "dns_zone_database_id" {
   type        = string
-  description = "Id of the private DNS zone for the Storage Blob."
-}
-
-variable "dns_zone_dfs_id" {
-  type        = string
-  description = "Id of the private DNS zone for the Storage Data Lake Gen2."
-}
-
-variable "dns_zone_file_id" {
-  type        = string
-  description = "Id of the private DNS zone for the Storage File."
-}
-
-variable "dns_zone_queue_id" {
-  type        = string
-  description = "Id of the private DNS zone for the Storage Queue."
-}
-
-variable "dns_zone_table_id" {
-  type        = string
-  description = "Id of the private DNS zone for the Storage Table."
+  description = "Id of the private DNS zone for the SQL database."
 }
 
 variable "hub_subnet_gateway_id" {
@@ -70,6 +50,68 @@ variable "location" {
   type        = string
   default     = "westeurope"
   description = "Default Azure region, use Azure CLI notation."
+}
+
+variable "log_primary_blob_endpoint" {
+  type        = string
+  description = "Primary Blob endpoint of the Log Storage Account."
+}
+
+variable "log_storage_account_id" {
+  type        = string
+  description = "Id of the Log Storage Account."
+}
+
+variable "mssql_server" {
+  type = object({
+    azuread_authentication_only   = bool
+    public_network_access_enabled = bool
+    version                       = string
+
+    elastic_pool = optional(object({
+      license_type                       = string
+      max_size_gb                        = number
+      sku_name                           = string
+      sku_tier                           = string
+      sku_family                         = string
+      sku_capacity                       = number
+      per_database_settings_min_capacity = number
+      per_database_settings_max_capacity = number
+    }))
+
+    databases = list(object({
+      name      = string
+      collation = string
+      sku_name  = string
+    }))
+  })
+
+  default = {
+    azuread_authentication_only   = true
+    public_network_access_enabled = true
+    version                       = "12.0"
+
+    elastic_pool = {
+      license_type                       = "LicenseIncluded"
+      max_size_gb                        = 9.7656250
+      sku_name                           = "BasicPool"
+      sku_tier                           = "Basic"
+      sku_family                         = null
+      sku_capacity                       = 100
+      per_database_settings_min_capacity = 0
+      per_database_settings_max_capacity = 5
+    }
+
+    databases = [
+      {
+        collation = "SQL_Latin1_General_CP1_CI_AS"
+        name      = "DBSDLZVSE01"
+        sku_name  = "Basic"
+      }
+    ]
+  }
+
+  description = "Configuration of Azure SQL Server and databases."
 }
 
 // See ASY nets here: https://ipinfo.io/AS33873
@@ -222,42 +264,14 @@ variable "security_groups" {
   description = "RBAC and key vault access policy for Azure Active Directory security groups and users."
 }
 
-variable "storage_account" {
-  type = list(object({
-    account_kind             = optional(string)
-    account_replication_type = string
-    account_tier             = string
-    is_hns_enabled           = optional(bool, false)
-    suffix                   = string
+variable "sql_aad_admin_login" {
+  type        = string
+  description = "Azure Active Directory SQL Admin login"
+}
 
-    private_endpoints = list(string)
-  }))
-
-  default = [
-    {
-      account_tier             = "Standard"
-      account_replication_type = "LRS"
-      suffix                   = "blob"
-
-      private_endpoints = [
-        "blob",
-        "table"
-      ]
-    },
-    {
-      account_tier             = "Standard"
-      account_replication_type = "LRS"
-      is_hns_enabled           = true
-      suffix                   = "adls"
-
-      private_endpoints = [
-        "blob",
-        "dfs"
-      ]
-    }
-  ]
-
-  description = "Configuration of Azure Storage Account"
+variable "sql_aad_admin_object_id" {
+  type        = string
+  description = "Azure Active Directory SQL Admin object id"
 }
 
 variable "subnet_private_endpoints_id" {
