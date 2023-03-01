@@ -79,11 +79,12 @@ variable "mssql_server" {
       per_database_settings_max_capacity = number
     }))
 
-    databases = list(object({
-      name      = string
-      collation = string
-      sku_name  = string
-    }))
+    databases = optional(list(object({
+      name           = string
+      collation      = string
+      linked_service = optional(string, "disabled")
+      sku_name       = string
+    })))
   })
 
   default = {
@@ -104,9 +105,10 @@ variable "mssql_server" {
 
     databases = [
       {
-        collation = "SQL_Latin1_General_CP1_CI_AS"
-        name      = "DBSDLZVSE01"
-        sku_name  = "Basic"
+        name           = "DBSDLZVSE01"
+        collation      = "SQL_Latin1_General_CP1_CI_AS"
+        linked_service = "enabled"
+        sku_name       = "Basic"
       }
     ]
   }

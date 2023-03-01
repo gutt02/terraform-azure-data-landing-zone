@@ -59,4 +59,8 @@ resource "azurerm_mssql_database" "this" {
   collation       = each.value.collation
   elastic_pool_id = var.mssql_server.elastic_pool != null ? azurerm_mssql_elasticpool.this[0].id : null
   sku_name        = var.mssql_server.elastic_pool != null ? "ElasticPool" : each.value.sku_name
+
+  tags = {
+    "linked_service" = each.value.linked_service
+  }
 }

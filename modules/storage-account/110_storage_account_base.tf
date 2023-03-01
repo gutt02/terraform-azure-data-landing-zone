@@ -16,6 +16,10 @@ resource "azurerm_storage_account" "this" {
   }
 
   is_hns_enabled = each.value.is_hns_enabled
+
+  tags = {
+    "linked_service" = each.value.linked_service
+  }
 }
 
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account_network_rules

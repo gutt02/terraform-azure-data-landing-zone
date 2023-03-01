@@ -228,6 +228,7 @@ variable "storage_account" {
     account_replication_type = string
     account_tier             = string
     is_hns_enabled           = optional(bool, false)
+    linked_service           = optional(string, "disabled")
     suffix                   = string
 
     private_endpoints = list(string)
@@ -237,6 +238,7 @@ variable "storage_account" {
     {
       account_tier             = "Standard"
       account_replication_type = "LRS"
+      linked_service           = "enabled"
       suffix                   = "blob"
 
       private_endpoints = [
@@ -248,6 +250,7 @@ variable "storage_account" {
       account_tier             = "Standard"
       account_replication_type = "LRS"
       is_hns_enabled           = true
+      linked_service           = "enabled"
       suffix                   = "adls"
 
       private_endpoints = [
