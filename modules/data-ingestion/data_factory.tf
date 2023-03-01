@@ -18,12 +18,13 @@ resource "azurerm_data_factory_integration_runtime_azure" "data_factory_integrat
     for o in var.data_factory.integration_runtimes : lower(replace(o.name, " ", "_")) => o if var.data_factory.integration_runtimes != null
   }
 
-  name             = each.value.name
-  location         = var.location
-  data_factory_id  = azurerm_data_factory.this.id
-  compute_type     = each.value.compute_type
-  core_count       = each.value.core_count
-  time_to_live_min = each.value.time_to_live_min
+  name                    = each.value.name
+  location                = var.location
+  data_factory_id         = azurerm_data_factory.this.id
+  compute_type            = each.value.compute_type
+  core_count              = each.value.core_count
+  time_to_live_min        = each.value.time_to_live_min
+  virtual_network_enabled = var.data_factory.managed_virtual_network_enabled && each.value.virtual_network_enabled
 }
 
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment
@@ -72,6 +73,7 @@ resource "azurerm_monitor_diagnostic_setting" "monitor_diagnostic_setting_data_f
 
   lifecycle {
     ignore_changes = [
+      log_analytics_destination_type,
       enabled_log,
       metric,
     ]

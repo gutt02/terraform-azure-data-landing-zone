@@ -40,7 +40,7 @@ resource "azurerm_storage_account_network_rules" "this" {
 
   storage_account_id         = azurerm_storage_account.this[each.key].id
   default_action             = "Deny"
-  bypass                     = toset(["None"])
+  bypass                     = toset(["AzureServices"])
   virtual_network_subnet_ids = var.hub_subnet_gateway_id != null ? [var.hub_subnet_gateway_id] : []
 }
 

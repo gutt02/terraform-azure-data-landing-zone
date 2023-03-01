@@ -40,13 +40,13 @@ resource "azurerm_mssql_virtual_network_rule" "this" {
   subnet_id = var.hub_subnet_gateway_id
 }
 
-# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/mssql_firewall_rule
-resource "azurerm_mssql_firewall_rule" "this" {
-  name             = "Allow Azure Services"
-  server_id        = azurerm_mssql_server.this.id
-  start_ip_address = "0.0.0.0"
-  end_ip_address   = "0.0.0.0"
-}
+# # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/mssql_firewall_rule
+# resource "azurerm_mssql_firewall_rule" "this" {
+#   name             = "Allow Azure Services"
+#   server_id        = azurerm_mssql_server.this.id
+#   start_ip_address = "0.0.0.0"
+#   end_ip_address   = "0.0.0.0"
+# }
 
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/mssql_elasticpool
 resource "azurerm_mssql_elasticpool" "this" {
@@ -119,9 +119,8 @@ resource "azurerm_mssql_database_extended_auditing_policy" "this" {
   log_monitoring_enabled = false
 
   depends_on = [
-    azurerm_mssql_server.this,
     azurerm_mssql_database.this,
-    azurerm_mssql_server_extended_auditing_policy.this
+    azurerm_role_assignment.this
   ]
 }
 
@@ -157,6 +156,7 @@ resource "azurerm_monitor_diagnostic_setting" "this" {
 
   lifecycle {
     ignore_changes = [
+      log_analytics_destination_type,
       enabled_log,
       metric,
     ]

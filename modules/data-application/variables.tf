@@ -21,9 +21,9 @@ variable "client_ip" {
 
   default = {
     name             = "ClientIP01"
-    cidr             = "93.228.115.13/32"
-    start_ip_address = "93.228.115.13"
-    end_ip_address   = "93.228.115.13"
+    cidr             = "62.153.146.84/32"
+    start_ip_address = "62.153.146.84"
+    end_ip_address   = "62.153.146.84"
   }
 
   description = "Client IP."
@@ -35,56 +35,19 @@ variable "client_secret" {
   description = "Client secret of the service principal."
 }
 
-variable "data_factory" {
-  type = object({
-    managed_virtual_network_enabled = optional(bool, false)
-    public_network_enabled          = bool
-
-    integration_runtimes = optional(list(object({
-      name                    = string
-      compute_type            = string
-      core_count              = number
-      time_to_live_min        = number
-      virtual_network_enabled = optional(bool, false)
-    })))
-  })
-
-  default = {
-    managed_virtual_network_enabled = true
-    public_network_enabled          = false
-
-    integration_runtimes = [
-      {
-        compute_type            = "General"
-        core_count              = 8
-        name                    = "AzHIRSmall"
-        time_to_live_min        = 15
-        virtual_network_enabled = true
-      }
-    ]
-  }
-
-  description = "Configuration of Azure Data Factory."
+variable "dns_zone_azuresynapse_id" {
+  type        = string
+  description = "Id of the private DNS zone for Azure Synapse Web."
 }
 
-variable "dns_zone_adf_id" {
+variable "dns_zone_sql_id" {
   type        = string
-  description = "Id of the private DNS zone for the Data Factory Portal."
+  description = "Id of the private DNS zone for Azure Synapse SQL."
 }
 
-variable "dns_zone_azure_devices_id" {
+variable "dns_zone_dev_azuresynapse_id" {
   type        = string
-  description = "Id of the private DNS zone for the IotHub."
-}
-
-variable "dns_zone_datafactory_id" {
-  type        = string
-  description = "Id of the private DNS zone for the Data Factory."
-}
-
-variable "dns_zone_servicebus_id" {
-  type        = string
-  description = "Id of the private DNS zone for the Service Bus."
+  description = "Id of the private DNS zone for Azure Synapse Dev."
 }
 
 variable "dns_zone_vaultcore_id" {
@@ -92,59 +55,10 @@ variable "dns_zone_vaultcore_id" {
   description = "Id of the private DNS zone for the Key Vault."
 }
 
-variable "eventhub_namespace" {
-  type = object({
-    sku      = string
-    capacity = optional(number)
-
-    eventhubs = list(object({
-      capture_description_enabled     = optional(bool)
-      capture_description_encoding    = optional(string)
-      destination_archive_name_format = optional(string)
-      destination_blob_container_name = optional(string)
-      name                            = string
-      message_retention               = number
-      partition_count                 = number
-    }))
-  })
-
-  default = {
-    sku = "Standard"
-
-    eventhubs = [
-      {
-        capture_description_enabled     = false
-        capture_description_encoding    = "Avro"
-        destination_archive_name_format = "{Namespace}/{EventHub}/{PartitionId}/{Year}/{Month}/{Day}/{Hour}/{Minute}/{Second}"
-        destination_blob_container_name = "evhub01"
-        message_retention               = 1
-        name                            = "evhub01"
-        partition_count                 = 2
-      }
-    ]
-  }
-
-  description = "Configuration of the Eventhub Namesapce."
-}
-
 variable "hub_subnet_gateway_id" {
   type        = string
   default     = null
   description = "Id of the Gateway in the Hub."
-}
-
-variable "iothub" {
-  type = object({
-    sku_name     = string
-    sku_capacity = string
-  })
-
-  default = {
-    sku_capacity = "1"
-    sku_name     = "F1"
-  }
-
-  description = "Configuration of the Iothub."
 }
 
 variable "location" {
@@ -316,6 +230,84 @@ variable "security_groups" {
 variable "subnet_private_endpoints_id" {
   type        = string
   description = "Id of the subnet for the private endpoints."
+}
+
+variable "synapse_aad_admin_login" {
+  type        = string
+  default     = null
+  description = "Azure Active Directory Azure Synapse Analytics Admininstrator login"
+}
+
+variable "synapse_aad_admin_object_id" {
+  type        = string
+  default     = null
+  description = "Azure Active Directory Azure Synapse Analytics Analytics Admininstrator object id"
+}
+
+variable "synapse_workspace" {
+  type = object({
+    spark_pools = optional(list(object({
+      auto_pause_delay_in_minutes = number
+      auto_scale_max_node_count   = number
+      auto_scale_min_node_count   = number
+      cache_size                  = number
+      name                        = string
+      node_size                   = string
+      node_size_family            = string
+      spark_version               = string
+    })))
+
+    sql_pools = optional(list(object({
+      auto_pause     = string
+      data_encrypted = bool
+      collation      = string
+      create_mode    = string
+      sku_name       = string
+      name           = string
+    })))
+
+    integration_runtimes = optional(list(object({
+      name             = string
+      compute_type     = string
+      core_count       = number
+      time_to_live_min = number
+    })))
+  })
+
+  default = {
+    spark_pools = [
+      {
+        auto_pause_delay_in_minutes = 15
+        auto_scale_max_node_count   = 10
+        auto_scale_min_node_count   = 3
+        cache_size                  = 100
+        name                        = "SparkPool01"
+        node_size                   = "Small"
+        node_size_family            = "MemoryOptimized"
+        spark_version               = "3.2"
+      }
+    ]
+
+    sql_pools = [
+      {
+        auto_pause     = "enabled"
+        collation      = "SQL_Latin1_General_CP1_CI_AS"
+        create_mode    = "Default"
+        data_encrypted = true
+        name           = "SqlPool01"
+        sku_name       = "DW100c"
+      }
+    ]
+
+    integration_runtimes = [{
+      compute_type     = "General"
+      core_count       = 8
+      name             = "AzHIR01"
+      time_to_live_min = 15
+    }]
+  }
+
+  description = "Configuration of Azure Synapse Analytics Workspace."
 }
 
 variable "tags" {
