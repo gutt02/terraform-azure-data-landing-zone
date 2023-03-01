@@ -14,13 +14,6 @@ resource "azurerm_key_vault" "this" {
   }
 }
 
-# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment
-resource "azurerm_role_assignment" "kv" {
-  scope                = azurerm_key_vault.this.id
-  role_definition_name = "Key Vault Administrator"
-  principal_id         = data.azurerm_client_config.client_config.object_id
-}
-
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint
 # https://docs.microsoft.com/en-us/azure/private-link/private-endpoint-overview#private-link-resource
 resource "azurerm_private_endpoint" "kv" {
