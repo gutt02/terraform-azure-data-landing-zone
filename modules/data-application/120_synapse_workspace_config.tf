@@ -20,6 +20,6 @@ resource "azurerm_synapse_workspace_extended_auditing_policy" "this" {
   retention_in_days    = 30
 
   depends_on = [
-    azurerm_role_assignment.storage_account
+    azurerm_role_assignment.log_storage_account
   ]
 }

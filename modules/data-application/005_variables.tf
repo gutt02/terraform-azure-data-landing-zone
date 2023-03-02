@@ -302,7 +302,7 @@ variable "synapse_workspace" {
     integration_runtimes = [{
       compute_type     = "General"
       core_count       = 8
-      name             = "AzHIR01"
+      name             = "AzHIRSmall"
       time_to_live_min = 15
     }]
   }

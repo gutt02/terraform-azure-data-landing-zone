@@ -19,7 +19,7 @@ locals {
 # https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep
 # Delay the creation of the resources. Might be necessary to wait for the creation of the firewall rules.
 # Note: Not fully evaluated.
-resource "time_sleep" "this" {
+resource "time_sleep" "delay_role_assignment" {
   depends_on = [
     azurerm_synapse_firewall_rule.azure_ips,
     azurerm_synapse_firewall_rule.agent_ip
@@ -36,8 +36,18 @@ resource "azurerm_role_assignment" "key_vault_azure_synapse" {
   principal_id         = azurerm_synapse_workspace.this.identity[0].principal_id
 }
 
-resource "azurerm_role_assignment" "storage_account_azure_synapse" {
+resource "azurerm_role_assignment" "log_storage_account" {
   scope                = var.log_storage_account_id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = azurerm_synapse_workspace.this.identity[0].principal_id
+}
+
+resource "azurerm_role_assignment" "storage_account" {
+  for_each = {
+    for o in data.azurerm_storage_account.storage_account : lower(replace(o.name, " ", "_")) => o
+  }
+
+  scope                = each.value.id
   role_definition_name = "Storage Blob Data Contributor"
   principal_id         = azurerm_synapse_workspace.this.identity[0].principal_id
 }
@@ -52,6 +62,6 @@ resource "azurerm_synapse_role_assignment" "synapse_workspace" {
   principal_id         = each.value.object_id
 
   depends_on = [
-    time_sleep.this
+    time_sleep.delay_role_assignment
   ]
 }

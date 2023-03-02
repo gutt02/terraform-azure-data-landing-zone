@@ -17,7 +17,7 @@ locals {
 }
 
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment
-resource "azurerm_role_assignment" "this" {
+resource "azurerm_role_assignment" "log_storage_account" {
   scope                = var.log_storage_account_id
   role_definition_name = "Storage Blob Data Contributor"
   principal_id         = azurerm_mssql_server.this.identity[0].principal_id

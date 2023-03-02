@@ -23,7 +23,7 @@ resource "azurerm_storage_account_network_rules" "this" {
 
 
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment
-resource "azurerm_role_assignment" "storage_account_sp" {
+resource "azurerm_role_assignment" "storage_account_service_principal" {
   for_each = {
     for o in toset(["Storage Account Contributor", "Storage Blob Data Contributor"]) : lower(replace(o, " ", "_")) => o
   }
@@ -41,7 +41,7 @@ resource "azurerm_storage_data_lake_gen2_filesystem" "this" {
 
   depends_on = [
     azurerm_storage_account_network_rules.this,
-    azurerm_role_assignment.storage_account_sp
+    azurerm_role_assignment.storage_account_service_principal
   ]
 }
 

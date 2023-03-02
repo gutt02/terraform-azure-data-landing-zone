@@ -24,7 +24,7 @@ resource "azurerm_mssql_server_extended_auditing_policy" "this" {
   log_monitoring_enabled = false
 
   depends_on = [
-    azurerm_role_assignment.this
+    azurerm_role_assignment.log_storage_account
   ]
 }
 
@@ -42,7 +42,7 @@ resource "azurerm_mssql_database_extended_auditing_policy" "this" {
 
   depends_on = [
     azurerm_mssql_database.this,
-    azurerm_role_assignment.this
+    azurerm_role_assignment.log_storage_account
   ]
 }
 
