@@ -1,0 +1,20 @@
+# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint
+# https://docs.microsoft.com/en-us/azure/private-link/private-endpoint-overview#private-link-resource
+resource "azurerm_private_endpoint" "eventhub_namespace" {
+  name                = "${azurerm_eventhub_namespace.this.name}-prep"
+  location            = var.location
+  resource_group_name = azurerm_resource_group.this.name
+  subnet_id           = var.subnet_private_endpoints_id
+
+  private_dns_zone_group {
+    name                 = replace(var.dns_zone_servicebus_id, "/.*[/]/", "")
+    private_dns_zone_ids = [var.dns_zone_servicebus_id]
+  }
+
+  private_service_connection {
+    name                           = "${azurerm_eventhub_namespace.this.name}-prep-psc"
+    is_manual_connection           = false
+    private_connection_resource_id = azurerm_eventhub_namespace.this.id
+    subresource_names              = ["namespace"]
+  }
+}
