@@ -60,3 +60,12 @@ locals {
     ]
   ])
 }
+
+# https://registry.terraform.io/providers/hashicorp/local/latest/docs/data-sources/file
+data "local_file" "resume_synapse_sql_pool" {
+  filename = "${path.module}/scripts/Resume-SynapseSQLPool.ps1"
+}
+
+data "local_file" "suspend_synapse_sql_pool" {
+  filename = "${path.module}/scripts/Suspend-SynapseSQLPool.ps1"
+}

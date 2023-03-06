@@ -263,15 +263,6 @@ variable "tags" {
   description = "Default tags for resources, only applied to resource groups"
 }
 
-# --------------------------------|--------------------|-----------------|-----------------|----
-#                                 | CIDR               | Start IP        | End IP          | IPs
-# --------------------------------|--------------------|-----------------|-----------------|----
-# VNET                            | 192.168.1.0/25     | 192.168.1.0     | 192.168.1.127   | 128
-# --------------------------------|--------------------|-----------------|-----------------|----
-# Shared Services                 | 192.168.1.0/28     | 192.168.1.0     | 192.168.1.15    | 16
-# Virtual Machines                | 192.168.1.16/28    | 192.168.1.16    | 192.168.1.31    | 16
-# Private Endpoints               | 192.168.1.64/26    | 192.168.1.64    | 192.168.1.127   | 64
-# --------------------------------|--------------------|-----------------|-----------------|----
 variable "virtual_network" {
   type = object({
     address_space = string
@@ -283,19 +274,27 @@ variable "virtual_network" {
   })
 
   default = {
-    address_space = "192.168.1.0/25"
+    address_space = "192.168.11.0/23"
     subnets = {
       shared_services = {
         name          = "shared-services"
-        address_space = "192.168.1.0/28"
+        address_space = "192.168.11.0/28"
       },
       virtual_machines = {
         name          = "virtual-machines"
-        address_space = "192.168.1.16/28"
+        address_space = "192.168.11.16/28"
       },
       private_endpoints = {
-        name          = "private_endpoints"
-        address_space = "192.168.1.64/26"
+        name          = "private-endpoints"
+        address_space = "192.168.11.64/26"
+      }
+      databricks_public = {
+        name          = "databricks-public"
+        address_space = "192.168.11.128/26"
+      }
+      databricks_private = {
+        name          = "databricks-private"
+        address_space = "192.168.11.192/26"
       }
     }
   }

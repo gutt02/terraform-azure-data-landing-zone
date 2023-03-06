@@ -4,6 +4,11 @@ locals {
   is_windows = substr(pathexpand("~"), 0, 1) == "/" ? false : true
 }
 
+variable "automation_account_name" {
+  type        = string
+  description = "Name of the Automation Account."
+}
+
 # curl ipinfo.io/ip
 variable "agent_ip" {
   type        = string
@@ -75,6 +80,11 @@ variable "log_primary_blob_endpoint" {
 variable "log_storage_account_id" {
   type        = string
   description = "Id of the Log Storage Account."
+}
+
+variable "mgmt_resource_group_name" {
+  type        = string
+  description = "Name of the Management Resourcegroup."
 }
 
 // See ASY nets here: https://ipinfo.io/AS33873
