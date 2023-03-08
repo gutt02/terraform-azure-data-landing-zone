@@ -39,6 +39,10 @@ resource "azurerm_data_factory_managed_private_endpoint" "sqlserver" {
     for o in data.azurerm_mssql_server.mssql_server : lower(replace(o.name, " ", "_")) => o
   }
 
+  # for_each = {
+  #   for o in local.database : lower(replace(o.mssql_server.name, " ", "_")) => o.mssql_server
+  # }
+
   name               = "${each.value.name}-prep"
   data_factory_id    = azurerm_data_factory.this.id
   target_resource_id = each.value.id

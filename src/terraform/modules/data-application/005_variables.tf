@@ -40,6 +40,12 @@ variable "client_secret" {
   description = "Client secret of the service principal."
 }
 
+variable "clz_subnet_gateway_id" {
+  type        = string
+  default     = null
+  description = "Id of the Gateway in the connectivity landing zone (Hub)."
+}
+
 variable "dns_zone_azuresynapse_id" {
   type        = string
   description = "Id of the private DNS zone for Azure Synapse Web."
@@ -63,12 +69,6 @@ variable "dns_zone_dev_azuresynapse_id" {
 variable "dns_zone_vaultcore_id" {
   type        = string
   description = "Id of the private DNS zone for the Key Vault."
-}
-
-variable "hub_subnet_gateway_id" {
-  type        = string
-  default     = null
-  description = "Id of the Gateway in the Hub."
 }
 
 variable "location" {

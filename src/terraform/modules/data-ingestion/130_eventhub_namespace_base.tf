@@ -11,7 +11,7 @@ resource "azurerm_eventhub_namespace" "this" {
   }
 
   dynamic "network_rulesets" {
-    for_each = var.hub_subnet_gateway_id != null ? [var.hub_subnet_gateway_id] : []
+    for_each = var.clz_subnet_gateway_id != null ? [var.clz_subnet_gateway_id] : []
 
     content {
       default_action                 = "Deny"

@@ -28,6 +28,12 @@ variable "client_secret" {
   description = "Client secret of the service principal."
 }
 
+variable "clz_subnet_gateway_id" {
+  type        = string
+  default     = null
+  description = "Id of the Gateway in the data landing zone (Hub)."
+}
+
 variable "dns_zone_blob_id" {
   type        = string
   description = "Id of the private DNS zone for the Storage Blob."
@@ -51,12 +57,6 @@ variable "dns_zone_queue_id" {
 variable "dns_zone_table_id" {
   type        = string
   description = "Id of the private DNS zone for the Storage Table."
-}
-
-variable "hub_subnet_gateway_id" {
-  type        = string
-  default     = null
-  description = "Id of the Gateway in the Hub."
 }
 
 variable "location" {

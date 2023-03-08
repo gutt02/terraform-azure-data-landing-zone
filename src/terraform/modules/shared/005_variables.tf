@@ -28,6 +28,30 @@ variable "client_secret" {
   description = "Client secret of the service principal."
 }
 
+variable "clz_network_resource_group_name" {
+  type        = string
+  default     = null
+  description = "Name of the network resource group in the data landing zone (Hub)"
+}
+
+variable "clz_subnet_gateway_id" {
+  type        = string
+  default     = null
+  description = "Id of the Gateway in the data landing zone (Hub)."
+}
+
+variable "clz_virtual_network_id" {
+  type        = string
+  default     = null
+  description = "Id of the data landing zone (Hub) VNET, null means no peering."
+}
+
+variable "clz_virtual_network_name" {
+  type        = string
+  default     = null
+  description = "Name of the data landing zone (Hub) VNET, null means no peering."
+}
+
 variable "dns_zone_azure_automation_id" {
   type        = string
   description = "Id of the private DNS zone for the Automation Account."
@@ -61,30 +85,6 @@ variable "dns_zone_oms_opinsights_id" {
 variable "dns_zone_vaultcore_id" {
   type        = string
   description = "Id of the private DNS zone for the Key Vault."
-}
-
-variable "hub_network_resource_group_name" {
-  type        = string
-  default     = null
-  description = "Name of the network resource group in the Hub"
-}
-
-variable "hub_subnet_gateway_id" {
-  type        = string
-  default     = null
-  description = "Id of the Gateway in the Hub."
-}
-
-variable "hub_virtual_network_id" {
-  type        = string
-  default     = null
-  description = "Id of the Hub VNET, null means no peering."
-}
-
-variable "hub_virtual_network_name" {
-  type        = string
-  default     = null
-  description = "Name of the Hub VNET, null means no peering."
 }
 
 variable "location" {

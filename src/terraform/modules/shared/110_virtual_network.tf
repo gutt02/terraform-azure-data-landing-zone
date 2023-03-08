@@ -81,28 +81,28 @@ resource "azurerm_subnet" "databricks_public" {
 }
 
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_network_peering
-resource "azurerm_virtual_network_peering" "dlz_to_hub" {
-  count = var.hub_virtual_network_id != null ? 1 : 0
+resource "azurerm_virtual_network_peering" "dlz_to_clz" {
+  count = var.clz_virtual_network_id != null ? 1 : 0
 
-  name                      = "${var.project.customer}-${var.project.name}-vnetpeer-hub"
+  name                      = "${var.project.customer}-${var.project.name}-vnetpeer-clz"
   resource_group_name       = azurerm_resource_group.network.name
   virtual_network_name      = azurerm_virtual_network.this.name
-  remote_virtual_network_id = var.hub_virtual_network_id
-  use_remote_gateways       = var.hub_subnet_gateway_id != null ? true : false
+  remote_virtual_network_id = var.clz_virtual_network_id
+  use_remote_gateways       = var.clz_subnet_gateway_id != null ? true : false
 }
 
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_network_peering
-resource "azurerm_virtual_network_peering" "hub_to_dlz" {
-  count = var.hub_virtual_network_name != null ? 1 : 0
+resource "azurerm_virtual_network_peering" "clz_to_dlz" {
+  count = var.clz_virtual_network_name != null ? 1 : 0
 
   name                      = "${var.project.customer}-${var.project.name}-vnetpeer-dlz"
-  resource_group_name       = var.hub_network_resource_group_name
-  virtual_network_name      = var.hub_virtual_network_name
+  resource_group_name       = var.clz_network_resource_group_name
+  virtual_network_name      = var.clz_virtual_network_name
   remote_virtual_network_id = azurerm_virtual_network.this.id
-  allow_gateway_transit     = var.hub_subnet_gateway_id != null ? true : false
+  allow_gateway_transit     = var.clz_subnet_gateway_id != null ? true : false
 
   depends_on = [
-    azurerm_virtual_network_peering.dlz_to_hub
+    azurerm_virtual_network_peering.dlz_to_clz
   ]
 }
 
