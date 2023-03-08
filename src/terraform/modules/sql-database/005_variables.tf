@@ -22,6 +22,12 @@ variable "client_ip" {
   description = "Client IP."
 }
 
+variable "clz_subnet_gateway_id" {
+  type        = string
+  default     = null
+  description = "Id of the Gateway in the data landing zone (Hub)."
+}
+
 variable "client_secret" {
   type        = string
   sensitive   = true
@@ -31,12 +37,6 @@ variable "client_secret" {
 variable "dns_zone_database_id" {
   type        = string
   description = "Id of the private DNS zone for the SQL database."
-}
-
-variable "hub_subnet_gateway_id" {
-  type        = string
-  default     = null
-  description = "Id of the Gateway in the Hub."
 }
 
 variable "location" {

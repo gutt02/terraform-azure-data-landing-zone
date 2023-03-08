@@ -21,7 +21,6 @@ resource "azurerm_storage_account_network_rules" "this" {
   ip_rules           = [var.agent_ip]
 }
 
-
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment
 resource "azurerm_role_assignment" "storage_account_service_principal" {
   for_each = {
@@ -32,7 +31,6 @@ resource "azurerm_role_assignment" "storage_account_service_principal" {
   role_definition_name = each.value
   principal_id         = data.azurerm_client_config.client_config.object_id
 }
-
 
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_data_lake_gen2_filesystem
 resource "azurerm_storage_data_lake_gen2_filesystem" "this" {

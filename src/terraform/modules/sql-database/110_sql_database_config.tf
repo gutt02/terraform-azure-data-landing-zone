@@ -1,10 +1,10 @@
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/mssql_virtual_network_rule
 resource "azurerm_mssql_virtual_network_rule" "this" {
-  count = var.hub_subnet_gateway_id != null ? 1 : 0
+  count = var.clz_subnet_gateway_id != null ? 1 : 0
 
   name      = "${azurerm_mssql_server.this.name}-vnr"
   server_id = azurerm_mssql_server.this.id
-  subnet_id = var.hub_subnet_gateway_id
+  subnet_id = var.clz_subnet_gateway_id
 }
 
 # # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/mssql_firewall_rule

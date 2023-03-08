@@ -28,6 +28,12 @@ variable "client_secret" {
   description = "Client secret of the service principal."
 }
 
+variable "clz_subnet_gateway_id" {
+  type        = string
+  default     = null
+  description = "Id of the Gateway in the Hub."
+}
+
 variable "data_factory" {
   type = object({
     managed_virtual_network_enabled = optional(bool, false)
@@ -118,12 +124,6 @@ variable "eventhub_namespace" {
   }
 
   description = "Configuration of the Eventhub Namesapce."
-}
-
-variable "hub_subnet_gateway_id" {
-  type        = string
-  default     = null
-  description = "Id of the Gateway in the Hub."
 }
 
 variable "iothub" {
