@@ -274,27 +274,27 @@ variable "virtual_network" {
   })
 
   default = {
-    address_space = "192.168.11.0/23"
+    address_space = "192.168.12.0/23"
     subnets = {
       shared_services = {
         name          = "shared-services"
-        address_space = "192.168.11.0/28"
+        address_space = "192.168.12.0/28"
       },
       virtual_machines = {
         name          = "virtual-machines"
-        address_space = "192.168.11.16/28"
+        address_space = "192.168.12.16/28"
       },
       private_endpoints = {
         name          = "private-endpoints"
-        address_space = "192.168.11.64/26"
-      }
-      databricks_public = {
-        name          = "databricks-public"
-        address_space = "192.168.11.128/26"
+        address_space = "192.168.12.64/26"
       }
       databricks_private = {
         name          = "databricks-private"
-        address_space = "192.168.11.192/26"
+        address_space = "192.168.12.128/26"
+      }
+      databricks_public = {
+        name          = "databricks-public"
+        address_space = "192.168.12.192/26"
       }
     }
   }

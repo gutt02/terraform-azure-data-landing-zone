@@ -45,6 +45,11 @@ variable "dns_zone_azuresynapse_id" {
   description = "Id of the private DNS zone for Azure Synapse Web."
 }
 
+variable "dns_zone_azuredatabricks_id" {
+  type        = string
+  description = "Id of the private DNS zone for Azure Databricks."
+}
+
 variable "dns_zone_sql_id" {
   type        = string
   description = "Id of the private DNS zone for Azure Synapse SQL."
@@ -86,6 +91,17 @@ variable "mgmt_resource_group_name" {
   type        = string
   description = "Name of the Management Resourcegroup."
 }
+
+variable "network_security_group_association_databricks_private_id" {
+  type        = string
+  description = "Id of the Network Security Association of the private subnet."
+}
+
+variable "network_security_group_association_databricks_public_id" {
+  type        = string
+  description = "Id of the Network Security Association of the public subnet."
+}
+
 
 // See ASY nets here: https://ipinfo.io/AS33873
 variable "on_premises_networks" {
@@ -237,6 +253,26 @@ variable "security_groups" {
   description = "RBAC and key vault access policy for Azure Active Directory security groups and users."
 }
 
+variable "subnet_databricks_private_id" {
+  type        = string
+  description = "Id of the private subnet for Azure Databricks"
+}
+
+variable "subnet_databricks_private_name" {
+  type        = string
+  description = "Name of the private subnet for Azure Databricks"
+}
+
+variable "subnet_databricks_public_id" {
+  type        = string
+  description = "Id of the public subnet for Azure Databricks"
+}
+
+variable "subnet_databricks_public_name" {
+  type        = string
+  description = "Name of the public subnet for Azure Databricks"
+}
+
 variable "subnet_private_endpoints_id" {
   type        = string
   description = "Id of the subnet for the private endpoints."
@@ -338,4 +374,9 @@ variable "tags" {
   }
 
   description = "Default tags for resources, only applied to resource groups"
+}
+
+variable "virtual_network_id" {
+  type        = string
+  description = "Id of the Virtual Network."
 }
