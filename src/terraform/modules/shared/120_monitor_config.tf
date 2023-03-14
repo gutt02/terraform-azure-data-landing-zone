@@ -1,3 +1,18 @@
+# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/log_analytics_solution
+resource "azurerm_log_analytics_solution" "this" {
+  solution_name       = "Updates"
+  location            = var.location
+  resource_group_name = azurerm_resource_group.mgmt.name
+
+  workspace_resource_id = azurerm_log_analytics_workspace.this.id
+  workspace_name        = azurerm_log_analytics_workspace.this.name
+
+  plan {
+    publisher = "Microsoft"
+    product   = "OMSGallery/Updates"
+  }
+}
+
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/log_analytics_linked_storage_account
 resource "azurerm_log_analytics_linked_storage_account" "this" {
   for_each = {
