@@ -56,6 +56,11 @@ variable "dns_zone_azuredatabricks_id" {
   description = "Id of the private DNS zone for Azure Databricks."
 }
 
+variable "dns_zone_azuredatabricks_id_be" {
+  type        = string
+  description = "Id of the private DNS zone for Azure Databricks for the backend (data landing zone)."
+}
+
 variable "dns_zone_sql_id" {
   type        = string
   description = "Id of the private DNS zone for Azure Synapse SQL."

@@ -1,3 +1,4 @@
+# https://registry.terraform.io/providers/databricks/databricks/latest/docs/guides/azure-private-link-workspace-simplified
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/databricks_workspace
 resource "azurerm_databricks_workspace" "this" {
   name                = "${var.project.customer}-${var.project.name}-${var.project.environment}-dbws"
@@ -5,7 +6,7 @@ resource "azurerm_databricks_workspace" "this" {
   resource_group_name = azurerm_resource_group.this.name
 
   custom_parameters {
-    no_public_ip                                         = true
+    no_public_ip = true
     # no_public_ip                                         = false
     private_subnet_name                                  = var.subnet_databricks_private_name
     private_subnet_network_security_group_association_id = var.network_security_group_association_databricks_private_id
@@ -19,5 +20,5 @@ resource "azurerm_databricks_workspace" "this" {
   network_security_group_rules_required = "NoAzureDatabricksRules"
   public_network_access_enabled         = false
   # public_network_access_enabled         = true
-  sku                                   = "premium"
+  sku = "premium"
 }

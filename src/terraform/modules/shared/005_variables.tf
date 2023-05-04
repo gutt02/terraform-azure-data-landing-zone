@@ -113,6 +113,16 @@ variable "on_premises_networks" {
   description = "List of on-premises networks."
 }
 
+variable "private_dns_zones" {
+  type = map(string)
+
+  default = {
+    dns_zone_azuredatabricks = "privatelink.azuredatabricks.net"
+  }
+
+  description = "Map of private DNS zones."
+}
+
 variable "project" {
   type = object({
     customer    = string

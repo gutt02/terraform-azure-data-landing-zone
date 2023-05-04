@@ -27,6 +27,15 @@ output "network_security_group_association_databricks_public_id" {
   value = azurerm_network_security_group.databricks_public.id
 }
 
+output "private_dns_zones" {
+  value = tomap({
+    for private_dns_zone_key, private_dns_zone_name in var.private_dns_zones : private_dns_zone_key => {
+      name = private_dns_zone_name
+      id   = azurerm_private_dns_zone.this[private_dns_zone_key].id
+    }
+  })
+}
+
 output "primary_blob_endpoint" {
   value = azurerm_storage_account.this.primary_blob_endpoint
 }
