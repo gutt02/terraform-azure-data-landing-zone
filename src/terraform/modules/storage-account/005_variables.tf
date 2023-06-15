@@ -108,7 +108,7 @@ variable "project" {
   default = {
     customer    = "azc"
     name        = "dlz"
-    environment = "vse"
+    environment = "acf"
   }
 
   description = "Project details, like customer name, environment, etc."
@@ -137,7 +137,7 @@ variable "security_groups" {
     {
       # Data and Platform Engineer
       name       = "data_platform_engineer"
-      object_ids = ["161b5111-f7f8-491e-b719-7d452500d1f1"]
+      object_ids = ["ed07b095-7809-48c8-8ae7-df71184102be"]
       role_assignments = {
         "data_factory"   = ["Data Factory Contributor"]
         "key_vault"      = ["Key Vault Administrator"]
@@ -157,7 +157,7 @@ variable "security_groups" {
     {
       # Data Analyst
       name       = "data_analyst"
-      object_ids = ["8381e24c-e540-4349-b801-4938c857ffdf"]
+      object_ids = ["fd1b8b2a-3132-4495-bff1-659f749e8f6e"]
       role_assignments = {
         "data_factory"   = []
         "key_vault"      = ["Key Vault Reader"]
@@ -176,7 +176,7 @@ variable "security_groups" {
     {
       # Data Scientist
       name       = "data_scientist"
-      object_ids = ["33a274c1-556d-43fd-b133-5262f97212f2"]
+      object_ids = ["dfce96dd-2542-4dbc-9416-1886a1a3b8dc"]
       role_assignments = {
         "data_factory"   = []
         "key_vault"      = ["Key Vault Reader"]
@@ -195,7 +195,7 @@ variable "security_groups" {
     {
       # Data Steward
       name       = "data_steward"
-      object_ids = ["ed09ccea-947c-4beb-b37e-1f2d2e11a554"]
+      object_ids = ["8928fb7e-424b-4c84-b8dd-a62f7598f904"]
       role_assignments = {
         "data_factory" = ["Data Factory Contributor"]
         "key_vault" = [
