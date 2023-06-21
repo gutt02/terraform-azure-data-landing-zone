@@ -308,7 +308,7 @@ variable "tags" {
   })
 
   default = {
-    created_by  = "vsp-base-msdn-sp-tf"
+    created_by  = "azc-iac-payg-sp-tf"
     contact     = "contact@me"
     customer    = "Azure Cloud"
     environment = "Visual Studio Enterprise"
