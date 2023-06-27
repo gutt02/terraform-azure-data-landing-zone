@@ -364,7 +364,7 @@ variable "tags" {
     project     = "Data Landing Zone"
   }
 
-  description = "Default tags for resources, only applied to resource groups"
+  description = "Default tags for resources, only applied to resource groups."
 }
 
 variable "virtual_network_id" {
